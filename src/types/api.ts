@@ -1,10 +1,9 @@
-import type { Difficulty } from './game';
+import type { Difficulty } from "./game";
 
-// Leaderboard
 export interface LeaderboardEntry {
   rank: number;
   username: string;
-  time: number; // milliseconds
+  time: number;
   userId: string;
 }
 
@@ -13,10 +12,9 @@ export interface LeaderboardResponse {
   entries: LeaderboardEntry[];
 }
 
-// Score submission
 export interface SubmitScoreRequest {
   difficulty: Difficulty;
-  time: number; // milliseconds
+  time: number;
 }
 
 export interface SubmitScoreResponse {
@@ -25,13 +23,11 @@ export interface SubmitScoreResponse {
   leaderboard: LeaderboardEntry[];
 }
 
-// User profile
 export interface UserProfile {
   id: string;
   username: string;
 }
 
-// User stats
 export interface UserStats {
   userId: string;
   username: string;
@@ -42,11 +38,10 @@ export interface DifficultyStats {
   gamesPlayed: number;
   wins: number;
   losses: number;
-  bestTime: number | null; // milliseconds, null if no wins
-  winRate: number; // percentage
+  bestTime: number | null;
+  winRate: number;
 }
 
-// API error response
 export interface ApiError {
   message: string;
   code?: string;

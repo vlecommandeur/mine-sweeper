@@ -1,12 +1,12 @@
-export type Difficulty = 'beginner' | 'intermediate' | 'expert';
+export type Difficulty = "beginner" | "intermediate" | "expert";
 
-export type CellState = 'hidden' | 'revealed' | 'flagged';
+export type CellState = "hidden" | "revealed" | "flagged";
 
-export type CellValue = number | 'mine';
+export type CellValue = number | "mine";
 
 export interface Cell {
   state: CellState;
-  value: CellValue | null; // null until revealed (unless it's a mine)
+  value: CellValue | null;
   isMine: boolean;
   adjacentMines: number;
 }
@@ -17,13 +17,13 @@ export interface Board {
   cols: number;
 }
 
-export type GameStatus = 'idle' | 'playing' | 'won' | 'lost';
+export type GameStatus = "idle" | "playing" | "won" | "lost";
 
 export interface GameState {
   board: Board | null;
   status: GameStatus;
   difficulty: Difficulty;
   minesRemaining: number;
-  elapsedTime: number; // milliseconds
+  elapsedTime: number;
   isFirstClick: boolean;
 }

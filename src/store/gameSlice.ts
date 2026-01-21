@@ -6,7 +6,7 @@ interface GameState {
   status: GameStatus;
   difficulty: Difficulty;
   minesRemaining: number;
-  elapsedTime: number; // milliseconds
+  elapsedTime: number;
   isFirstClick: boolean;
 }
 
@@ -23,79 +23,39 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    initGame: (
-      state,
-      action: PayloadAction<{
-        board: Board;
-        difficulty: Difficulty;
-        totalMines: number;
-      }>
-    ) => {
-      state.board = action.payload.board;
-      state.difficulty = action.payload.difficulty;
-      state.minesRemaining = action.payload.totalMines;
-      state.status = 'idle';
-      state.elapsedTime = 0;
-      state.isFirstClick = true;
+    setBoard: (state, action: PayloadAction<Board>) => {
+      state.board = action.payload;
     },
 
-    startGame: (state) => {
-      state.status = 'playing';
+    setStatus: (state, action: PayloadAction<GameStatus>) => {
+      state.status = action.payload;
     },
 
-    revealCell: (
-      state,
-      action: PayloadAction<{ row: number; col: number; newBoard: Board }>
-    ) => {
-      state.board = action.payload.newBoard;
-      if (state.status === 'idle') {
-        state.status = 'playing';
-        state.isFirstClick = false;
-      }
+    setDifficulty: (state, action: PayloadAction<Difficulty>) => {
+      state.difficulty = action.payload;
     },
 
-    toggleFlag: (
-      state,
-      action: PayloadAction<{ row: number; col: number; newBoard: Board }>
-    ) => {
-      state.board = action.payload.newBoard;
-    },
-
-    updateMinesRemaining: (state, action: PayloadAction<number>) => {
+    setMinesRemaining: (state, action: PayloadAction<number>) => {
       state.minesRemaining = action.payload;
     },
 
-    updateTimer: (state, action: PayloadAction<number>) => {
+    setElapsedTime: (state, action: PayloadAction<number>) => {
       state.elapsedTime = action.payload;
     },
 
-    winGame: (state) => {
-      state.status = 'won';
-    },
-
-    loseGame: (state) => {
-      state.status = 'lost';
-    },
-
-    resetGame: (state) => {
-      state.status = 'idle';
-      state.elapsedTime = 0;
-      state.isFirstClick = true;
-      // Note: board is reset by initGame
+    setIsFirstClick: (state, action: PayloadAction<boolean>) => {
+      state.isFirstClick = action.payload;
     },
   },
 });
 
 export const {
-  initGame,
-  startGame,
-  revealCell,
-  toggleFlag,
-  updateMinesRemaining,
-  updateTimer,
-  winGame,
-  loseGame,
-  resetGame,
+  setBoard,
+  setStatus,
+  setDifficulty,
+  setMinesRemaining,
+  setElapsedTime,
+  setIsFirstClick,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
