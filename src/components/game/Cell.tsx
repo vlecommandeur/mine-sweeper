@@ -1,6 +1,11 @@
 import { useDispatch } from "react-redux";
 import type { Cell as CellType, Board } from "../../types";
-import { placeMines, revealCell as revealCellLogic, checkWin } from "../../services/gameLogic";
+import {
+  placeMines,
+  revealCell as revealCellLogic,
+  checkWin,
+  revealAllMines,
+} from "../../services/gameLogic";
 import { setBoard, setStatus, setIsFirstClick } from "../../store/gameSlice";
 
 interface CellProps {
@@ -13,7 +18,15 @@ interface CellProps {
   col: number;
 }
 
-export const Cell = ({ cell, board, minesRemaining, isFirstClick, currentStatus, row, col }: CellProps) => {
+export const Cell = ({
+  cell,
+  board,
+  minesRemaining,
+  isFirstClick,
+  currentStatus,
+  row,
+  col,
+}: CellProps) => {
   const dispatch = useDispatch();
 
   const { state, value } = cell;
@@ -21,17 +34,21 @@ export const Cell = ({ cell, board, minesRemaining, isFirstClick, currentStatus,
   const handleCellClick = () => {
     let newBoard = board;
 
-    // On first click, place mines first
     if (isFirstClick) {
       newBoard = placeMines(board, minesRemaining, row, col);
       dispatch(setIsFirstClick(false));
     }
 
-    const { newBoard: revealedBoard, isMine } = revealCellLogic(newBoard, row, col);
+    const { newBoard: revealedBoard, isMine } = revealCellLogic(
+      newBoard,
+      row,
+      col,
+    );
     dispatch(setBoard(revealedBoard));
 
     if (isMine) {
       dispatch(setStatus("lost"));
+      dispatch(setBoard(revealAllMines(revealedBoard)));
     } else if (checkWin(revealedBoard)) {
       dispatch(setStatus("won"));
     } else if (currentStatus === "idle") {
@@ -49,7 +66,7 @@ export const Cell = ({ cell, board, minesRemaining, isFirstClick, currentStatus,
     <button
       className="w-8 h-8 cursor-pointer border border-gray-400 flex items-center justify-center text-sm font-bold"
       onClick={handleCellClick}
-      disabled={state === "revealed"}
+      disabled={state === "revealed" || currentStatus === "lost"}
     >
       {getCellDisplay()}
     </button>
